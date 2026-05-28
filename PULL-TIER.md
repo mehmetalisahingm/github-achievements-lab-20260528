@@ -6,3 +6,4 @@
 - Pull tier check 4.
 - Pull tier check 5.
 - Pull tier check 6.
+- Pull tier check 7.
