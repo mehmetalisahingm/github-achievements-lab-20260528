@@ -7,3 +7,4 @@
 - Coauthored tier check 5.
 - Coauthored tier check 6.
 - Coauthored tier check 7.
+- Coauthored tier check 8.
