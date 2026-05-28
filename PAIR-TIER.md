@@ -8,3 +8,4 @@
 - Coauthored tier check 6.
 - Coauthored tier check 7.
 - Coauthored tier check 8.
+- Coauthored tier check 9.
