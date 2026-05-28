@@ -1,0 +1,36 @@
+name: Discussion Bot Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      comment_id:
+        description: Discussion comment node ID to mark as answer
+        required: false
+        default: ""
+
+permissions:
+  discussions: write
+
+jobs:
+  discussion:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPOSITORY_ID: ${{ github.event.repository.node_id }}
+      CATEGORY_ID: DIC_kwDOSqOsFs4C-AiT
+      COMMENT_ID: ${{ inputs.comment_id }}
+    steps:
+      - name: Create bot-authored discussion or mark answer
+        run: |
+          if [ -n "$COMMENT_ID" ]; then
+            gh api graphql \
+              -f query='mutation($id: ID!) { markDiscussionCommentAsAnswer(input: {id: $id}) { discussion { number url answerChosenAt answerChosenBy { login } } } }' \
+              -F id="$COMMENT_ID"
+          else
+            gh api graphql \
+              -f query='mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) { createDiscussion(input: {repositoryId: $repositoryId, categoryId: $categoryId, title: $title, body: $body}) { discussion { id number url } } }' \
+              -F repositoryId="$REPOSITORY_ID" \
+              -F categoryId="$CATEGORY_ID" \
+              -f title="Bot question for accepted-answer workflow" \
+              -f body="What is a concise reason to keep repository workflow checks isolated?"
+          fi
