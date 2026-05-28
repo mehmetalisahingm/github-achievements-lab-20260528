@@ -1,0 +1,27 @@
+name: Coauthor Bot Check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  commit-note:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create coauthored bot commit
+        run: |
+          branch="bot/coauthor-check-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          {
+            echo "# Bot Notes"
+            echo
+            echo "- Coauthored workflow check from run ${GITHUB_RUN_ID}."
+          } > BOT-NOTES.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BOT-NOTES.md
+          git commit -m "Add bot coauthored note" -m "Co-authored-by: Mehmet Ali SAHIN <mehmetalixdxd@gmail.com>"
+          git push origin "$branch"
